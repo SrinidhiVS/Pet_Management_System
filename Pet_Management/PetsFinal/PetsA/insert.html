@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insert Entry Form</title>
+    <style>
+      body {
+        font-family: Cambria, serif;
+        margin: 0;
+        padding: 0;
+        background-color: #5f5d9c;
+      }
+
+      form {
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: #4d89cd;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #357ebd;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="insert.php" method="post" class="inf">
+      <h2>Insert Entry Form</h2>
+
+      <h2>Pet</h2>
+      <label for="pet_id">PET_ID:</label>
+      <input type="number" id="pet_id" name="pet_id" required />
+
+      <label for="pet_name">Name:</label>
+      <input type="text" id="pet_name" name="pet_name" required />
+
+      <label for="pet_type">Type:</label>
+      <input type="text" id="pet_type" name="pet_type" required />
+
+      <label for="pet_breed">Breed:</label>
+      <input type="text" id="pet_breed" name="pet_breed" required />
+
+      <label for="pet_age">Age:</label>
+      <input type="number" id="pet_age" name="pet_age" required />
+
+      <label for="pet_gender">Gender:</label>
+      <select id="pet_gender" name="pet_gender" required>
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+
+      <label for="pet_status">Status:</label>
+      <input type="text" id="pet_status" name="pet_status" required />
+
+      <h2>Medical Reord</h2>
+      <label for="vaccination_id">VACCINATION_ID:</label>
+      <input type="number" id="vaccination_id" name="vaccination_id" required />
+
+      <label for="vaccination_status">VACCINATION_STATUS:</label>
+      <input
+        type="text"
+        id="vaccination_status"
+        name="vaccination_status"
+        required
+      />
+
+      <label for="next_due_date">NEXT_DUE_DATE:</label>
+      <input type="date" id="next_due_date" name="next_due_date" required />
+
+      <label for="disease_history">DISEASE_HISTORY:</label>
+      <input type="text" id="disease_history" name="disease_history" required />
+
+      <label for="current_diseases">CURRENT_DISEASES:</label>
+      <input
+        type="text"
+        id="current_diseases"
+        name="current_diseases"
+        required
+      />
+
+      <h2>Adopter</h2>
+      <label for="adopter_id">ADOPTER_ID:</label>
+      <input type="number" id="adopter_id" name="adopter_id" required />
+
+      <label for="shelter_id">PET_ID:</label>
+      <input type="number" id="shelter_id" name="shelter_id" required />
+
+      <label for="adopter_name">ADOPTER_NAME:</label>
+      <input type="text" id="adopter_name" name="adopter_name" required />
+
+      <label for="amount">AMOUNT:</label>
+      <input type="number" id="amount" name="amount" required />
+
+      <label for="contact">CONTACT:</label>
+      <input type="number" id="contact" name="contact" required />
+
+      <h2>Employee</h2>
+      <label for="employee_id">EMPLOYEE_ID:</label>
+      <input type="number" id="employee_id" name="employee_id" required />
+
+      <label for="name">NAME:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="gender">GENDER:</label>
+      <select id="gender" name="gender" required>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+
+      <label for="salary">SALARY:</label>
+      <input type="number" id="salary" name="salary" required />
+
+      <label for="phone">PHONE:</label>
+      <input type="number" id="phone" name="phone" required />
+
+      <input type="submit" value="Submit" onclick="handleClick()" id="submit" />
+    </form>
+
+    <script>
+      document
+        .getElementById("submit")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+        });
+
+      async function handleClick() {
+        const inf_p = document.querySelectorAll("input");
+
+        const data = {};
+
+        for (let i = 0; i < inf_p.length - 1; i++) {
+          data[inf_p[i].id] = inf_p[i].value;
+        }
+
+        console.log(data);
+
+        await fetch("http://127.0.0.1:5000/insert-all", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+      }
+    </script>
+  </body>
+</html>

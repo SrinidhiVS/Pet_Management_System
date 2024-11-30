@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Page Title</title>
+    <style>
+      body {
+        background-color: #5F5D9C;
+        font-family: Cambria, serif; 
+        margin: 0; 
+        padding: 0;
+      }
+
+      nav {
+        background-color: #B5C0D0; 
+        text-align: center;
+        padding: 10px 0; 
+        display: flex;
+        justify-content: space-between; 
+        align-items: center; 
+      }
+
+      nav h1 {
+        margin-left: auto; 
+        margin-right: auto; 
+        font-weight: bold; 
+        text-align: center;
+        font-size: 24px; 
+        padding-left: 150px;
+      }
+
+      nav a {
+        text-decoration: none; 
+        color: #5F5D9C; 
+        padding: 10px 20px; 
+        margin: 0 10px; 
+        font-size: 25px; 
+      }
+
+      nav a:hover {
+        background-color: #ccc; 
+      }
+
+      h2 {
+      color: #F4EDCC;
+      font-size: 4rem;
+      line-height: 1.1;
+      margin: 0 0 2rem 0;
+      text-align: center;
+      }
+
+      p {
+      color: #F4EDCC;
+      font-size: 1.5rem;
+		  text-align: center;
+		  margin: 0 0 2rem 0;
+	    }
+
+      img{
+        padding-bottom:10px;
+        max-width: 100%;
+        height: auto;
+      }
+
+      form {
+        width: 50%; 
+        margin: 20px auto;
+        padding: 20px; 
+        background-color: #fff; 
+        border-radius: 5px; 
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); 
+      }
+
+      label {
+        display: block; 
+        margin-bottom: 10px; 
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select {
+        width: 100%; 
+        padding: 8px; 
+        margin-bottom: 15px; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        box-sizing: border-box; 
+      }
+
+      submit-button{
+        background-color: #4d89cd; 
+        color: white; 
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        font-size: 16px; 
+      }
+
+      submit-button:hover {
+        background-color: #357ebd; 
+      }
+
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="pets.html" style="font-weight: bold;">Pets</a>
+
+      <h1><a href="index.html" style="font-weight: bolder;">>_&lt; PETPALS</a></h1>
+
+      <a href="login.html" style="font-weight: bold;">Employee Login</a>
+
+    </nav>
+
+    
+
+    <div id="intro">
+      <h2>Welcome to PETPALS!</h2>
+      <p>Looking for unconditional love? Visit our shelter today! <br /></p>
+      <p>At PetPals, we believe in finding loving forever homes for our furry friends.</br> 
+        Our adoption process is designed to ensure that both the pet and the adopter are a perfect match.</br>
+        Take your time to browse through the profiles of our available pets.
+          We encourage you to stay in touch and reach out to us if you need any assistance or advice regarding your pet.</br>
+        By adopting a pet from PetPals, you're not only gaining a loyal companion but also giving a deserving animal 
+        a second chance at a happy life. Start your adoption journey today!
+        
+      </p>
+      <p>We have pets like : Dogs, Cats, Fishes, Turtles, Rabbits and even Birds.</p>
+      <center><img src="images/pic01.jpg" alt="" /></center>
+
+    </div><br><br>
+<form action="pets.html" method="post" class="inf">
+      <center><h3>FEEDBACK</h3></center>
+      <label for="pet_id">ADOPTER ID:</label>
+      <input type="number" id="pet_id" name="pet_id" />
+
+      <label for="pet_name">PET NAME:</label>
+      <input type="text" id="pet_name" name="pet_name" />
+
+      <label for="pet_type">DATE:</label>
+      <input type="text" id="pet_type" name="pet_type"  />
+
+      <label for="pet_breed">RATING:</label>
+      <input type="text" id="pet_breed" name="pet_breed"  />
+
+      <label for="pet_age">REVIEW:</label>
+      <input type="number" id="pet_age" name="pet_age" />
+
+      <input type="submit" value="Submit" onclick="handleClick" id="submit" />
+</form>
+<script>
+  document
+    .getElementById("submit")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      window.location.href = "index.html";
+    });
+</script>
+  </body>
+</html>

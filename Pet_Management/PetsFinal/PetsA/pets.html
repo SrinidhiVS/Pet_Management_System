@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pets Page</title>
+    <style>
+      body {
+        font-family: Cambria, serif;
+        margin: 0;
+        padding: 0;
+        background-color: #5f5d9c;
+      }
+
+      nav {
+        background-color: #b5c0d0;
+        text-align: center;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+      }
+
+      nav h1 {
+        margin: 0;
+        font-weight: bold;
+        font-size: 24px;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #5f5d9c;
+        padding: 10px 20px;
+        font-size: 25px;
+      }
+
+      nav a:hover {
+        background-color: #ccc;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+      }
+
+      .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .search-input {
+        padding: 10px;
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .submit-button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .submit-button:hover {
+        background-color: #45a049;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: white;
+      }
+
+      table caption {
+        font-weight: bold;
+        font-size: 20px;
+        padding: 10px;
+        background-color: #a4ce95;
+        color: white;
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #a4ce95;
+        color: white;
+      }
+
+      td a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="pets.html" style="font-weight: bold">Pets</a>
+
+      <h1>
+        <a href="index.html" style="font-weight: bolder">>_&lt; PETPALS</a>
+      </h1>
+
+      <a href="login.html" style="font-weight: bold">Employee Login</a>
+    </nav>
+
+    <div class="container">
+      <div class="search-bar">
+        <form id="search-form">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search pets..."
+          />
+          <button type="submit" class="submit-button">Submit</button>
+        </form>
+      </div>
+
+      <table id="pet-table">
+        <caption>
+          PET Table
+        </caption>
+
+        <tbody id="pet-table-body"></tbody>
+      </table>
+      <br />
+
+      <h1 style="color: white" id="no-of"></h1>
+    </div>
+
+    <center>
+      <a href="pets.html"><button class="submit-button">Back</button></a>
+    </center>
+
+    <script>
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const searchInput = document.querySelector(".search-input").value;
+        var res = await fetch(
+          `http://127.0.0.1:5000/get-petinfo/${searchInput}`
+        );
+        var data = await res.json();
+
+        console.log(data);
+
+        const tableBody = document.getElementById("pet-table-body");
+        tableBody.innerHTML = "";
+
+        data.data.forEach((rowData) => {
+          const row = document.createElement("tr");
+
+          rowData.forEach((cellData) => {
+            const cell = document.createElement("td");
+            cell.textContent = cellData;
+            row.appendChild(cell);
+          });
+
+          tableBody.appendChild(row);
+        });
+
+        res = await fetch(`http://127.0.0.1:5000/get-count/${searchInput}`);
+        var data = await res.json();
+
+        const n = document.getElementById("no-of");
+        n.innerHTML = `${data.data[0]} ${searchInput}s Found`;
+      }
+
+      const form = document.getElementById("search-form");
+      form.addEventListener("submit", handleSubmit);
+    </script>
+
+    <script>
+      async function main() {
+        const res = await fetch("http://127.0.0.1:5000/get-all-tables");
+        const data = await res.json();
+
+        appendRows("pet-table", data.pet, [
+          "PET_ID",
+          "NAME",
+          "TYPE",
+          "BREED",
+          "AGE",
+          "GENDER",
+          "STATUS",
+        ]);
+      }
+
+      function appendRows(tableName, tableData, headers) {
+        const table = document.getElementById(tableName);
+        const headerRow = table.insertRow();
+        headers.forEach((header) => {
+          const th = document.createElement("th");
+          th.textContent = header;
+          headerRow.appendChild(th);
+        });
+        tableData.forEach((rowData) => {
+          const row = table.insertRow();
+          rowData.forEach((cellData, index) => {
+            const cell = row.insertCell();
+            cell.textContent = cellData;
+          });
+          const actionCell = row.insertCell();
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.onclick = async function () {
+            const firstColumnValue = row.cells[0].textContent;
+            console.log(
+              "Delete clicked for row with value: " + firstColumnValue
+            );
+            console.log("Table Name: " + tableName);
+
+            await fetch(
+              `http://127.0.0.1:5000/${tableName}/${firstColumnValue}`,
+              {
+                method: "POST",
+              }
+            );
+
+            window.location.reload();
+          };
+        });
+      }
+
+      main()
+        .then(() => {})
+        .catch((error) => {
+          console.error("An error occurred:", error);
+        });
+    </script>
+  </body>
+</html>

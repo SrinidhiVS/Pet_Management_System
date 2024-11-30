@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Database Management</title>
+    <style>
+      body {
+        font-family: Cambria, serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+      }
+
+      table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #4d89cd;
+        color: white;
+      }
+
+      .insert-button {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .insert-button button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #4d89cd;
+        color: white;
+        font-size: 16px;
+      }
+
+      .insert-button button:hover {
+        background-color: #357ebd;
+      }
+
+      .action-buttons {
+        text-align: right;
+      }
+
+      .action-buttons button {
+        margin-left: 5px;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .logout-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="logout-button">Logout</a>
+
+    <div class="insert-button">
+      <button onclick="window.location.href = 'insert.html'">
+        Insert Entry
+      </button>
+    </div>
+
+    <table id="pet-table">
+      <caption>
+        PET Table
+      </caption>
+    </table>
+    <br />
+    <table id="medical-records-table">
+      <caption>
+        MEDICAL_RECORDS Table
+      </caption>
+    </table>
+    <br /><br />
+    <table id="adopter-table">
+      <caption>
+        ADOPTER Table
+      </caption>
+    </table>
+    <br /><br />
+    <table id="employee-table">
+      <caption>
+        EMPLOYEE Table
+      </caption>
+    </table>
+    <br /><br />
+
+    <script>
+      async function main() {
+        const res = await fetch("http://127.0.0.1:5000/get-all-tables");
+        const data = await res.json();
+
+        appendRows("pet-table", data.pet, [
+          "PET_ID",
+          "NAME",
+          "TYPE",
+          "BREED",
+          "AGE",
+          "GENDER",
+          "STATUS",
+          "ACTION",
+        ]);
+        appendRows("medical-records-table", data.medical_records, [
+          "PET_ID",
+          "VACCINATION_ID",
+          "VACCINATION_STATUS",
+          "NEXT_DUE_DATE",
+          "DISEASE_HISTORY",
+          "CURRENT_DISEASES",
+          "ACTION",
+        ]);
+        appendRows("adopter-table", data.adopter, [
+          "ADOPTER_ID",
+          "PET_ID",
+          "ADOPTER_NAME",
+          "AMOUNT",
+          "CONTACT",
+          "ACTION",
+        ]);
+        appendRows("employee-table", data.employee, [
+          "EMPLOYEE_ID",
+          "NAME",
+          "GENDER",
+          "SALARY",
+          "PHONE",
+          "ACTION",
+        ]);
+        appendRows("feedback-table", data.feedback, [
+          "ADOPTER_ID",
+          "PET_NAME",
+          "DATE",
+          "RATING",
+          "REVIEW",
+          "ACTION",
+        ]);
+      }
+
+      function appendRows(tableName, tableData, headers) {
+        const table = document.getElementById(tableName);
+        const headerRow = table.insertRow();
+        headers.forEach((header) => {
+          const th = document.createElement("th");
+          th.textContent = header;
+          headerRow.appendChild(th);
+        });
+        tableData.forEach((rowData) => {
+          const row = table.insertRow();
+          rowData.forEach((cellData, index) => {
+            const cell = row.insertCell();
+            cell.textContent = cellData;
+          });
+          const actionCell = row.insertCell();
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.onclick = async function () {
+            const firstColumnValue = row.cells[0].textContent;
+            console.log(
+              "Delete clicked for row with value: " + firstColumnValue
+            );
+            // Log the table name
+            console.log("Table Name: " + tableName);
+
+            await fetch(
+              `http://127.0.0.1:5000/${tableName}/${firstColumnValue}`,
+              {
+                method: "POST",
+              }
+            );
+
+            window.location.reload();
+          };
+
+          actionCell.appendChild(deleteButton);
+        });
+      }
+
+      main()
+        .then(() => {})
+        .catch((error) => {
+          console.error("An error occurred:", error);
+        });
+    </script>
+  </body>
+</html>
